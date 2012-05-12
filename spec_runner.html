@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Jasmine Spec Runner</title>
+
+  <link rel="shortcut icon" type="image/png" href="lib/jasmine-1.2.0.rc3/jasmine_favicon.png">
+  <link rel="stylesheet" type="text/css" href="assets/stylesheets/jasmine.css">
+  <script type="text/javascript" src="assets/frameworks/jasmine.js"></script>
+  <script type="text/javascript" src="assets/frameworks/jasmine-html.js"></script>
+  <script type='text/javascript' src='assets/frameworks/jquery.js'></script>
+  <script type='text/javascript' src='assets/frameworks/underscore.js'></script>
+  <script type='text/javascript' src='assets/frameworks/backbone.js'></script>
+  
+  <!-- include source files here... -->
+  <script type="text/javascript" src="API/rihanna_facebook.json"></script>
+  <script type="text/javascript" src="API/rihanna_twitter.json"></script>
+  <script type="text/javascript" src="API/rihanna_vevo.json"></script>
+  <script type="text/javascript" src="API/rihanna_wikipedia.json"></script>
+  <script type="text/javascript" src="API/rihanna_radio_geo.json"></script>    
+  <script type="text/javascript" src="API/rihanna_events.json"></script>  
+  <script type="text/javascript" src="API/kanye_events.json"></script>
+  <script type="text/javascript" src="API/katyperry_events.json"></script>  
+  <script type="text/javascript" src="assets/javascript/nbs_data.js"></script>
+  
+  <!-- include spec files here... -->
+  <script type="text/javascript" src="assets/javascript/specs/test_nbs_data.js"></script>
+
+  <script type="text/javascript">
+    (function() {
+      var jasmineEnv = jasmine.getEnv();
+      jasmineEnv.updateInterval = 1000;
+
+      var htmlReporter = new jasmine.HtmlReporter();
+
+      jasmineEnv.addReporter(htmlReporter);
+
+      jasmineEnv.specFilter = function(spec) {
+        return htmlReporter.specFilter(spec);
+      };
+
+      var currentWindowOnload = window.onload;
+
+      window.onload = function() {
+        if (currentWindowOnload) {
+          currentWindowOnload();
+        }
+        execJasmine();
+      };
+
+      function execJasmine() {
+        jasmineEnv.execute();
+      }
+
+    })();
+  </script>
+
+</head>
+
+<body>
+</body>
+</html>

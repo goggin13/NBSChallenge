@@ -1,0 +1,71 @@
+
+#php_challenge,
+#js_challenge {
+  display: none;
+}
+#php_challenge {
+  padding: 10px 100px;
+}
+
+html {
+  background: darkgray;
+}
+
+body {
+  width: 1000px;
+  background: white;
+  padding: 20px;
+  margin: 15px auto;
+  border-radius: 15px;
+}
+
+.controller {
+  padding: 5px;
+  border: thin solid black;
+  border-radius: 5px;
+  margin: 5px;  
+}
+
+.action {
+  padding: 5px;
+  border-top: medium solid black;
+  display: none;
+}
+
+.route {
+  background: lightblue;
+  padding: 2px;
+}
+
+.route .method {
+  font-weight: bold;
+}
+
+pre {
+  padding: 2px;
+  background: whitesmoke;
+}
+
+.controller h4 {
+  padding: 10px 5px;
+  background: gray;
+  margin: 0px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.bullet { font: 10px sans-serif; }
+.bullet .marker { stroke: #000; stroke-width: 2px; }
+.bullet .tick line { stroke: #666; stroke-width: .5px; }
+.bullet .range.s0 { fill: #eee; }
+.bullet .range.s1 { fill: #ddd; }
+.bullet .range.s2 { fill: #bbb; }
+.bullet .range.s3 { fill: #999; }
+.bullet .range.s4 { fill: #777; }
+.bullet .measure.s0 { fill: lightsteelblue; }
+.bullet .measure.s1 { fill: steelblue; }
+.bullet .measure.s2 { fill: salmon; }
+.bullet .measure.s3 { fill: lightblue; }
+.bullet .measure.s4 { fill: lightgreen; }
+.bullet .title { font-size: 14px; font-weight: bold; }
+.bullet .subtitle { fill: #999; }

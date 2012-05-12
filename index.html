@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+<title>NBS Challenge (Goggin)</title>
+  
+  <script type='text/javascript' src='assets/frameworks/jquery.js'></script>
+  <script type='text/javascript' src='assets/frameworks/jquery-ui.min.js'></script>
+  <script type='text/javascript' src='assets/frameworks/underscore.js'></script>
+  <script type='text/javascript' src='assets/frameworks/backbone.js'></script>
+  <script type='text/javascript' src='assets/frameworks/d3.js'></script>
+  
+  <script type='text/javascript' src='assets/javascript/bullets.js'></script>
+  
+  <script type="text/javascript" src="API/rihanna_facebook.json"></script>
+  <script type="text/javascript" src="API/rihanna_twitter.json"></script>
+  <script type="text/javascript" src="API/rihanna_vevo.json"></script>
+  <script type="text/javascript" src="API/rihanna_wikipedia.json"></script>
+  <script type="text/javascript" src="API/rihanna_radio_geo.json"></script>    
+  <script type="text/javascript" src="API/rihanna_events.json"></script>  
+  <script type="text/javascript" src="API/kanye_events.json"></script>
+  <script type="text/javascript" src="API/katyperry_events.json"></script>  
+
+  <!-- Models -->
+  <script type="text/javascript" src="assets/javascript/nbs_data.js"></script>
+  <script type="text/javascript" src="assets/javascript/nbs_artist.js"></script>
+  
+  <!-- Views -->
+  <script type='text/javascript' src='assets/javascript/date_slider.js'></script>
+  <script type='text/javascript' src='assets/javascript/chart.js'></script>
+  
+  <script type='text/javascript' src='assets/javascript/router.js'></script>
+  
+  
+  
+  <link rel="stylesheet" type="text/css" href="assets/stylesheets/index.css" />
+  <link rel="stylesheet" type="text/css" href="assets/stylesheets/jquery-ui.css" />
+</head>
+
+<body>
+  
+  <h1>Next Big Sound Challenges</h1>
+  <a href='php' class='push_nav'>PHP</a>
+  <a href='js' class='push_nav'>JS</a>
+  <a href='spec_runner.html' >Tests</a>
+    
+  <div id='js_challenge'>
+    <h2>JS Challenge</h2>
+    
+    <label for='artist'>Artist:</label>
+    <input type="text" value="rihanna" name="artist" disabled="disabled" />
+    
+  </div>
+  
+  
+  <div id='php_challenge'>
+    <h2>PHP Challenge</h2>
+    
+    <h3>Authentication and Error Responses</h3>
+
+    <p>
+      Every controller action described below requires authentication.
+      Include this in the form of a oauth_token included in your request.
+      <br/>
+      Error codes will be returned as follows:
+    </p>
+    <ul> 
+      <li>
+        Unauthenticated. For anonymous requests (those lacking a valid oauth_token),
+        HTTP 401 will be returned with the following body:
+        <pre>{"error": "unauthenticated"}</pre>
+      </li>
+      <li>
+        Forbidden. For requests with a valid oauth_token that are attempting to 
+        retrieve or modify resources they do not have the privileges for,
+        HTTP 403 will be returned with the following body:
+        <pre>{"error": "forbidden"}</pre>         
+      </li>
+      <li>
+        Not Found. Requests made to retrieve resources that cannot be located
+        will return HTTP 404 with the following body:
+        <pre>{"error": "not found"}</pre>         
+      </li>
+      <li>
+        Unprocessable Entity. Requests made to create or update a resource
+        that do not constitute a valid modification (see particular actions for
+        what valid means in context) will return HTTP 422 with the following body:
+        <pre>{"error": "unprocessable entity", "description": ":validation_errors:"}</pre>
+        :validation_errors: will contain action specific details regarding the validation
+        failures.
+      </li>
+    </ul>
+    <p>
+      Error responses will be standard over the controller actions, so in the subsequent
+      section we will document only successful requests.
+    </p>
+    
+    <h3>API Routes and Sample Responses (by controller)</h3>
+  
+    <div class='controller'>
+      <h4>Artists</h4>
+
+      <div class='action'>
+
+        <div class='route'>
+          <span class='method'>GET</span>
+          <span class='url'>/artists/:artist_id.json</span>
+        </div>
+
+        <p class="description">
+          This route retrieves a hash of data about the artist described by :artist_id
+        </p>
+
+        <div class="sample_request">
+          Sample request:
+          <div class='route'>
+            <span class='method'>GET</span>
+            <span class='url'>/artists/124.json?oauth_token=YOUR_ACCESS_TOKEN</span>
+          </div>
+<pre>
+{
+ "id" : 123,
+ "name" : "Matisyahu",
+ "music_brainz_id": 314kjsffgjkl3434,
+ ...
+}
+</pre>          
+        </div>        
+      </div>
+      
+      <div class='action'>
+
+        <div class='route'>
+          <span class='method'>PUT</span>
+          <span class='url'>/artists/:artist_id.json</span>
+        </div>
+
+        <p class="description">
+          This route updates the artist described by :artist_id, and should include a
+          json body of {"key": "value"} pairs to update.  It will return the updated artist
+          on success.
+        </p>
+
+        <div class="sample_request">
+          Sample request:
+          <div class='route'>
+            <span class='method'>PUT</span>
+            <span class='url'>/artists/124.json</span>
+<pre>
+{
+ "oauth_token": "YOUR_ACCESS_TOKEN"
+ "music_brainz_id": "new_music_brainz_id",
+ ...
+}
+</pre>
+          </div>   
+<pre>
+{
+ "id" : 123,
+ "name" : "Matisyahu",
+ "music_brainz_id": "new_music_brainz_id",
+ ...
+}
+</pre>             
+        </div>        
+      </div>      
+    </div>  
+  
+    <div class='controller'>
+      <h4>Profiles</h4>
+      
+      <div class='action'>
+        
+        <div class='route'>
+          <span class='method'>GET</span>
+          <span class='url'>/artists/:artist_id/profiles.json</span>
+        </div>
+        
+        <p class="description">
+          This route retrieves an array of profiles associated with the specified artist.
+        </p>
+        
+        <div class="sample_request">
+          Sample request:
+          <div class='route'>
+            <span class='method'>GET</span>
+            <span class='url'>/artists/123/profiles.json?oauth_token=YOUR_ACCESS_TOKEN</span>
+          </div>
+<pre>
+[
+  {"type" : "facebook",
+   "id" : 123,
+   "data" : {"data_point1" : "value", ...}
+  },
+  {"type" : "twitter",
+   "id" : 123123,
+   "data" : {"data_point1" : "value", ...}
+  },
+  ...
+]
+</pre>          
+        </div>        
+      </div>
+
+      <div class='action'>
+
+        <div class='route'>
+          <span class='method'>POST</span>
+          <span class='url'>/artists/:artist_id/profiles.json</span>
+        </div>
+
+        <p class="description">
+          This route creates a new profile assigned to the artist described by :artist_id.
+          The body of the POST should be JSON composed of {"key": "value"} for this particular profile.  
+          It will return the created profile body on success.  The body MUST INCLUDE the "type" of the
+          profile, which must be one of the predetermined accepted values (e.g., 'facebook', 'twitter',
+          'vevo', etc...).  
+        </p>
+
+        <div class="sample_request">
+          Sample request:
+          <div class='route'>
+            <span class='method'>POST</span>
+            <span class='url'>/artists/123/profiles.json</span>
+<pre>
+{
+  "oauth_token": "YOUR_ACCESS_TOKEN",
+  "type": "facebook",
+  "key_1": "key_1_value",
+  "key_2": "key_2_value"
+}
+</pre>            
+          </div>
+<pre>
+{
+  "type" : "facebook",
+  "id" : 123,
+  "data" : {"key_1" : "key_1_value", ...}
+}
+</pre>          
+        </div>        
+      </div>
+      
+      <div class='action'>
+
+        <div class='route'>
+          <span class='method'>PUT</span>
+          <span class='url'>/profiles/:profile_id.json</span>
+        </div>
+
+        <p class="description">
+          This route updates the profile described by :profile_id, and should include a
+          json body of {"key": "value"} pairs to update.  It will return the updated profile
+          body on success.
+        </p>
+
+        <div class="sample_request">
+          Sample request:
+          <div class='route'>
+            <span class='method'>PUT</span>
+            <span class='url'>/profiles/4.json</span>
+<pre>
+{
+  "oauth_token": "YOUR_ACCESS_TOKEN",
+  "key_1": "updated_key_1_value",
+  "key_2": "updated_key_2_value"
+}
+</pre>            
+          </div>
+<pre>
+{
+  "type" : "facebook",
+  "id" : 123,
+  "data" : {"key_1" : "updated_key_1_value", ...}
+}
+</pre>          
+        </div>        
+      </div>      
+      
+    </div>
+
+    <div class='controller'>
+      <h4>Songs</h4>
+
+      <div class='action'>
+
+        <div class='route'>
+          <span class='method'>GET</span>
+          <span class='url'>/artists/:artist_id/songs.json</span>
+        </div>
+
+        <p class="description">
+          This route retrieves an array of songs associated with the specified artist.
+        </p>
+
+        <div class="sample_request">
+          Sample request:
+          <div class='route'>
+            <span class='method'>GET</span>
+            <span class='url'>/artists/123/songs.json?oauth_token=YOUR_ACCESS_TOKEN</span>
+          </div>
+<pre>
+[
+  {
+   "id" : 1,
+   "title" : "I Shot the Sheriff",
+   "artist_id": 123
+  },
+  {
+   "id" : 2,
+   "title" : "No Woman No Cry",
+   "artist_id": 123
+  },
+  ...
+]
+</pre>          
+        </div>        
+      </div>
+      
+      <div class='action'>
+
+        <div class='route'>
+          <span class='method'>POST</span>
+          <span class='url'>/songs/radio_data.json</span>
+        </div>
+
+        <p class="description">
+          This route purchases radio data subscriptions for a track or collection of tracks.
+          The request should include a hash containing song_ids as keys, and number of
+          months to purchase as values.  For example, passing {142: 2} would purchase
+          2 months of data for the song with id 142.  The response will include a hash
+          of all of your current subscriptions (including the new ones).
+        </p>
+
+        <div class="sample_request">
+          Sample request:
+          <div class='route'>
+            <span class='method'>POST</span>
+            <span class='url'>/songs/radio_data.json</span>
+          
+<pre>
+{
+  "oauth_token" : "YOUR_ACCESS_TOKEN",
+  142: 12,
+  156: 12,
+  178: 6
+}
+</pre>     
+          </div>
+<pre>
+{
+  98: 9,
+  142: 12,
+  156: 12,
+  178: 6,
+  200: 2
+}
+</pre>
+     
+        </div>        
+      </div>      
+    </div>
+
+    <div class='controller'>
+      <h4>Videos</h4>
+
+      <div class='action'>
+
+        <div class='route'>
+          <span class='method'>GET</span>
+          <span class='url'>/artists/:artist_id/videos.json</span>
+        </div>
+
+        <p class="description">
+          This route retrieves an array of videos associated with the specified artist.
+        </p>
+
+        <div class="sample_request">
+          Sample request:
+          <div class='route'>
+            <span class='method'>GET</span>
+            <span class='url'>/artists/124/video.json?oauth_token=YOUR_ACCESS_TOKEN</span>
+          </div>
+<pre>
+[
+  {
+   "id" : 1,
+   "title" : "Hit Me Baby One More Time",
+   "artist_id": 124
+  },
+  {
+   "id" : 2,
+   "title" : "Toxic",
+   "artist_id": 124
+  },
+  ...
+]
+</pre>          
+        </div>        
+      </div>      
+    </div>
+
+    <div class='controller'>
+      <h4>OAuth2</h4>
+
+      <div class='action'>
+
+        <div class='route'>
+          <span class='method'>GET</span>
+          <span class='url'>/oauth2/:service</span>
+        </div>
+
+        <p class="description">
+          Redirect users here (likely via a popup), in order to obtain OAuth2 tokens for a third party
+          services (from those supported by NBS, E.G. FacebookInsights, Google Analytics...).  Optionally include 
+          a 'scope' parameter including a comma delimited  of permissions to request for that service.  Scope
+          variables will be particular to a service, and omitting the scope parameter will result in the default
+          permission set for that service.
+        </p>
+        <p class="description">
+          If a user has already approved the service, the page will immediately return an OAuth2 access token,
+          otherwise the user will be redirected to the appropriate third party to authenticate.  On successful
+          authentication with the third party, the server will perform the rest of the OAuth2 exchange and return
+          a valid token.  If the user declines third party authentication, an appropriate message will be returned.  
+        </p>        
+
+        <div class="sample_request">
+          Sample request:
+          <div class='route'>
+            <span class='method'>GET</span>
+            <span class='url'>/oauth2/facebook_insights</span>
+          </div>         
+        </div>        
+      </div>      
+    </div>
+
+    <h3>ER Diagram</h3>
+    
+    <h3>Last Implementation Thoughts</h3>
+    
+    <p>
+      I've documented only the JSON API calls above, and I believe the question also wants to discuss the
+      controllers that are returning HTML for these pages.  I would picture
+      only 1 controller serving the skeleton layout shown in each of the screen shots, which would
+      be the artist controller.  So to get to this page for an artist, you would visit "/artists/:artist_id"
+      in your browser (note the lack of extension vs the ".json" which ends all the API calls).  
+    </p>
+    <p>
+      The artists controller would serve up 
+      the main layout of the page, and Javascript (and Backbone.js) could take over from there to 
+      retrieve (via AJAX) and render the main
+      content for the particular tab.  Using Backbone routers would also enable deep linking
+      to a particular tab, e.g. "/artists/:artist_id/radio", or "/artists/:artist_id/profiles", if we just
+      routed those requests through the same action on the artists controller.
+    </p>
+    <p>
+      Lastly, it's likely the API above is incomplete, as it lacks thorough CRUD operations
+      for every resource.  I believe I hit the bullet points listed in the spec, and I chose to not list out here
+      all the other routes that I imagine would be needed. To list a few..
+      <ul>
+        <li>Adding and deleting an artist</li>
+        <li>Retrieving your radio data subscriptions</li>
+        <li>Canceling or modifying a radio data subscription</li>
+        <li>Creating, deleting, modifying songs</li>
+        <li>Creating, deleting, modifying videos</li>
+      </ul>
+      Some of these may not be necessary, depending on how certain data is being populated, and what users
+      are allowed to modify it.
+    <p>
+      If you are looking for more detail here, please let me know and I'm happy to flesh out these thoughts or
+      discuss in person.  
+    </p>    
+  </div>
+    
+</body>
+</html>
+  
