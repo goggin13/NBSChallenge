@@ -20,7 +20,7 @@
   <script type="text/javascript" src="API/rihanna_events.json"></script>  
   <script type="text/javascript" src="API/kanye_events.json"></script>
   <script type="text/javascript" src="API/katyperry_events.json"></script>  
-
+  
   <!-- Models -->
   <script type="text/javascript" src="assets/javascript/nbs_data.js"></script>
   <script type="text/javascript" src="assets/javascript/nbs_artist.js"></script>
@@ -40,15 +40,63 @@
 <body>
   
   <h1>Next Big Sound Challenges</h1>
-  <a href='php' class='push_nav'>PHP</a>
-  <a href='js' class='push_nav'>JS</a>
-  <a href='spec_runner.html' >Tests</a>
+  <a href='php' class='push_nav main_link'>PHP</a>
+  <a href='js' class='push_nav main_link'>JS</a>
+  <a href='spec_runner.html' class='main_link'>Tests</a>
     
   <div id='js_challenge'>
     <h2>JS Challenge</h2>
     
+    <div id='help_text'>
+      <p>
+        Each of the 4 rows below shows data from one of the services tracked by NBS, and visualizes
+        the aggregated data from that service over the given time period.  The following stats are 
+        displayed on each row:
+      </p>
+      <ul>
+        <li>
+          Mean: The mean activity count for the time period is displayed as a single, vertical
+          black bar.
+        </li>
+        <li>
+          Last 5 Daily values: The activity counts for each of the last 5 days are displayed on
+          the row (if there is data for that day).  The color coded bars above the chart show the 
+          dates that correspond to each colored bar on the graph.
+        </li>
+        <li>
+          Min, 1'st quartile, median, 3'rd quartile, max: The shaded gray bars show the distribution
+          of the activity counts in the current date range. The far right of each shaded region represents,
+          from left to right:
+          <ul>
+            <li>the minimum value</li>
+            <li>the first quartile</li>
+            <li>the median value</li>
+            <li>the third quartile value</li>
+            <li>the maximum value</li>
+          </ul>
+        </li>
+        <li>
+          The pie chart underneath the bar graphs shows the breakdown of events over the given time period.
+          You can toggle the pie chart to show:
+          <ul>
+            <li>Frequency: Number of data points for each type</li>
+            <li>Weight: Sum of the 'weight' attribute for each event of that type</li>
+            <li>Count: Sum of the 'count' attribute for each event of that type</li>
+          </ul>
+          Note that the earliest event data is on 8/14/2011, so any ranges before that will be blank.
+      </ul>
+    </div>
+    
     <label for='artist'>Artist:</label>
     <input type="text" value="rihanna" name="artist" disabled="disabled" />
+    
+    <div class='legend'>
+      <div class='measure s4'></div>
+      <div class='measure s3'></div>
+      <div class='measure s2'></div>
+      <div class='measure s1'></div>
+      <div class='measure s0'></div>
+    </div>
     
   </div>
   
@@ -60,7 +108,7 @@
 
     <p>
       Every controller action described below requires authentication.
-      Include this in the form of a oauth_token included in your request.
+      Include this in the form of a oauth_token in your request.
       <br/>
       Error codes will be returned as follows:
     </p>
@@ -115,7 +163,7 @@
           Sample request:
           <div class='route'>
             <span class='method'>GET</span>
-            <span class='url'>/artists/124.json?oauth_token=YOUR_ACCESS_TOKEN</span>
+            <span class='url'>/artists/123.json?oauth_token=YOUR_ACCESS_TOKEN</span>
           </div>
 <pre>
 {
@@ -145,7 +193,7 @@
           Sample request:
           <div class='route'>
             <span class='method'>PUT</span>
-            <span class='url'>/artists/124.json</span>
+            <span class='url'>/artists/123.json</span>
 <pre>
 {
  "oauth_token": "YOUR_ACCESS_TOKEN"
@@ -417,12 +465,18 @@
           variables will be particular to a service, and omitting the scope parameter will result in the default
           permission set for that service.
         </p>
+        
         <p class="description">
           If a user has already approved the service, the page will immediately return an OAuth2 access token,
           otherwise the user will be redirected to the appropriate third party to authenticate.  On successful
           authentication with the third party, the server will perform the rest of the OAuth2 exchange and return
           a valid token.  If the user declines third party authentication, an appropriate message will be returned.  
-        </p>        
+        </p>  
+        
+        <p class="description">
+          Once a service has been linked, then NBS can populate a record in the proprietary sources table with
+          data from that service. 
+        </p>              
 
         <div class="sample_request">
           Sample request:
@@ -434,7 +488,57 @@
       </div>      
     </div>
 
+    <div class='controller'>
+      <h4>Proprietary Sources</h4>
+
+      <div class='action'>
+
+        <div class='route'>
+          <span class='method'>GET</span>
+          <span class='url'>/proprietary_sources/:source_id.json</span>
+        </div>
+
+        <p class="description">
+          This route retrieves stored data for the given source id.  This presumes that
+          the current user has authorized a the given source (see OAuth2 controller).
+        </p>
+
+        <div class="sample_request">
+          Sample request:
+          <div class='route'>
+            <span class='method'>GET</span>
+            <span class='url'>/proprietary_sources/1234.json?oauth_token=YOUR_ACCESS_TOKEN</span>
+          </div>
+<pre>
+{
+ "id" : 1234,
+ "service" : "Facebook Insights",
+ ...
+}
+</pre>          
+        </div>        
+      </div>      
+    </div>
+
     <h3>ER Diagram</h3>
+    
+    <img src='assets/images/er_diagram.png' alt="ER Diagram" />
+    
+    <p>
+      The part of this diagram I was most unsure about was the "Profiles" table.
+      I presume that very different types of data are stored for each different profile,
+      and so considered that they might each belong in a distinct table.  I ended up deciding
+      against that because (if this is a relational database schema), then that would require
+      more than a dozen joins to get all of an artists profiles.  Here, all the profiles are
+      stored in a single table, and there is a "data" column which can store the relevant
+      values for each service.  
+    </p>
+    <p>
+      In this implementation, each profile's data could be stored as JSON, 
+      though that may pose other challenges for updating it and aggregating
+      across profiles. Depending on the most common use cases for the profile data I might
+      modify the decision I made in this exercise. 
+    </p>
     
     <h3>Last Implementation Thoughts</h3>
     

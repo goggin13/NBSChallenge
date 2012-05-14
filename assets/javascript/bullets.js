@@ -1,43 +1,4 @@
 
-// my_data = [
-//   {
-//    title: "Twitter Activity",
-//    subtitle: "in thousands",
-//    ranges: [40, 120, 200, 250, 300], // 1'st quartile, median, 3rd quartile, max over time range
-//    measures: [150, 220, 290, 230, 270], // daily values
-//    markers: [150] // mean
-//   }
-// ]
-
-
-// 14951
-// 15308
-
-// function get_data (callback) {
-//   $(document).ready(function () {
-//       var data = [];
-//       var min_date = 0;
-//       var max_date = 0;
-//       data_points = new NBSFacebookData("rihanna");
-//       data_points.fetch(function(models, resp) {
-//         data.push(data_points.get_chart_data());
-//       });
-//       data_points = new NBSTwitterData("rihanna");
-//       data_points.fetch(function(models, resp) {
-//         data.push(data_points.get_chart_data());
-//       });
-//       data_points = new NBSWikipediaData("rihanna");
-//       data_points.fetch(function(models, resp) {
-//         data.push(data_points.get_chart_data());
-//       });
-//       data_points = new NBSVevoData("rihanna");
-//       data_points.fetch(function(models, resp) {
-//         data.push(data_points.get_chart_data());
-//       });      
-//       callback(data);
-//   });
-// };
-
 var width = 960,
     height = 75,
     margin = {top: 5, right: 40, bottom: 20, left: 120};
@@ -45,37 +6,6 @@ var width = 960,
 var chart = bulletChart()
     .width(width - margin.right - margin.left)
     .height(height - margin.top - margin.bottom);
-
-// get_data(function(data) {
-    
-  // var vis = d3.select("#chart").selectAll("svg")
-  //     .data(data)
-  //   .enter().append("svg")
-  //     .attr("class", "bullet")
-  //     .attr("width", width)
-  //     .attr("height", height)
-  //   .append("g")
-  //     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-  //     .call(chart);
-  // 
-  // var title = vis.append("g")
-  //     .attr("text-anchor", "end")
-  //     .attr("transform", "translate(-6," + (height - margin.top - margin.bottom) / 2 + ")");
-  // 
-  // title.append("text")
-  //     .attr("class", "title")
-  //     .text(function(d) { return d.title; });
-  // 
-  // title.append("text")
-  //     .attr("class", "subtitle")
-  //     .attr("dy", "1em")
-  //     .text(function(d) { return d.subtitle; });
-  // 
-  // chart.duration(1000);
-  // window.transition = function() {
-  //   vis.datum(randomize).call(chart);
-  // };
-// });
 
 function randomize(d) {
   if (!d.randomizer) d.randomizer = randomizer(d);
@@ -116,7 +46,7 @@ function bulletChart() {
 
       // Compute the new x-scale.
       var x1 = d3.scale.linear()
-          .domain([0, Math.max(rangez[0], markerz[0], measurez[0])])
+          .domain([0, Math.max(rangez[0], markerz[0], measurez.sort(d3.descending)[0])])
           .range(reverse ? [width, 0] : [0, width]);
 
       // Retrieve the old x-scale, if this is an update.
@@ -196,11 +126,14 @@ function bulletChart() {
           .attr("y2", height * 5 / 6);
 
       // Compute the tick format.
-      var format = tickFormat || x1.tickFormat(8);
+      var format = function(d) { return x1.tickFormat(8)(d); };
 
       // Update the tick groups.
       var tick = g.selectAll("g.tick")
           .data(x1.ticks(8), function(d) {
+            // console.log("update a tick");
+            // console.log(d);
+            // console.log(format(d));
             return this.textContent || format(d);
           });
 

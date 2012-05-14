@@ -17,6 +17,7 @@
       js_challenge: function() {
         var artist, chart;
         $php_page.fadeOut() && $js_page.fadeIn();
+        if (this._js_initialized) return;
         artist = new NBSArtist({
           name: 'rihanna'
         });
@@ -24,7 +25,8 @@
           model: artist
         });
         $js_page.append(chart.render().el);
-        return chart.init_graph();
+        chart.init_graph();
+        return this._js_initialized = true;
       }
     });
     router = new MyRouter();

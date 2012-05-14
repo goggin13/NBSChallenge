@@ -15,10 +15,12 @@
     
     js_challenge: ->
       $php_page.fadeOut() && $js_page.fadeIn()
+      return if @_js_initialized
       artist = new NBSArtist name: 'rihanna'
       chart = new Chart model: artist
       $js_page.append chart.render().el
       chart.init_graph()
+      @_js_initialized = true
       
   router = new MyRouter()
   Backbone.history.start()

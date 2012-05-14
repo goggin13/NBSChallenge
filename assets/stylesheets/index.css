@@ -14,7 +14,7 @@ html {
 body {
   width: 1000px;
   background: white;
-  padding: 20px;
+  padding: 35px 25px;
   margin: 15px auto;
   border-radius: 15px;
 }
@@ -54,6 +54,22 @@ pre {
   border-radius: 5px;
 }
 
+.left { float: left; margin-top: 20px; }
+.right { float: right; margin-top: 20px; }
+.clear { clear: both }
+
+.legend {
+  float: right;
+}
+.legend .measure {
+  width: 100px;
+  padding: 4px 0px;
+  float: left;
+  text-align: center;
+  border-radius: 3px;
+  border: thin solid black;
+}
+
 .bullet { font: 10px sans-serif; }
 .bullet .marker { stroke: #000; stroke-width: 2px; }
 .bullet .tick line { stroke: #666; stroke-width: .5px; }
@@ -62,10 +78,38 @@ pre {
 .bullet .range.s2 { fill: #bbb; }
 .bullet .range.s3 { fill: #999; }
 .bullet .range.s4 { fill: #777; }
-.bullet .measure.s0 { fill: lightsteelblue; }
-.bullet .measure.s1 { fill: steelblue; }
-.bullet .measure.s2 { fill: salmon; }
-.bullet .measure.s3 { fill: lightblue; }
-.bullet .measure.s4 { fill: lightgreen; }
+.measure.s0 { fill: lightsteelblue; background: lightsteelblue}
+.measure.s1 { fill: steelblue; background: steelblue}
+.measure.s2 { fill: salmon; background: salmon}
+.measure.s3 { fill: lightblue; background: lightblue}
+.measure.s4 { fill: lightgreen; background: lightgreen}
 .bullet .title { font-size: 14px; font-weight: bold; }
 .bullet .subtitle { fill: #999; }
+
+.chart_object {
+  height: 125px;
+  padding-top: 125px;
+  text-align: center;
+  font-size: 2em;
+}
+#chart_image {
+  margin-left: 225px;
+}
+#chart_wrapper {
+  height: 280px;
+  padding: 15px 0px;
+}
+.chart_options { 
+  float: right;
+  margin-right: 100px;
+}
+.chart_options li {
+  list-style: none;
+}
+.main_link {
+  color: blue;
+  font-size: 1.5em;
+  text-decoration: none;
+  cursor: pointer;
+  margin: 5px;
+}
